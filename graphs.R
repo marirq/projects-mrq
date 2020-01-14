@@ -26,8 +26,10 @@ head(m.test)
 ggplot(data = m.test1, aes(x=variable, y=value)) + 
   geom_bar(stat = "identity", position = "dodge", aes(fill=dogs_pres)) +
   facet_wrap( ~ variable, scales="free")
- 
-ggplot(data = m.test4, aes(x=variable, y=value, fill=dogs_pres)) + 
+
+
+
+ggplot(data = m.test3, aes(x=variable, y=value, fill=dogs_pres)) + 
   geom_boxplot() +
   xlab('') +
   ylab('Number of') +
