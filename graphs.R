@@ -5,6 +5,14 @@ pns.corr <- pns %>%
 select(-dogs)
 pns.corr$dogs_pres <- pns$dogs_pres
 
+pns.corr <- cor(pns.corr, use= 'complete.obs')
+corrplot::corrplot(pns.corr, type = 'lower', order = 'hclust')
+
+pns.corr <- pns %>%
+  select_if(is.numeric) #%>%
+select(-dogs)
+pns.corr$dogs_pres <- pns$dogs_pres
+
 n.test <- pns.corr$dogs_pres %>% # classification
   createDataPartition(p = .8, list = FALSE)
 test <- pns.corr[-n.test, ]
@@ -26,7 +34,6 @@ head(m.test)
 ggplot(data = m.test1, aes(x=variable, y=value)) + 
   geom_bar(stat = "identity", position = "dodge", aes(fill=dogs_pres)) +
   facet_wrap( ~ variable, scales="free")
-
 
 
 ggplot(data = m.test3, aes(x=variable, y=value, fill=dogs_pres)) + 
