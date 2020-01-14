@@ -1,11 +1,14 @@
 # dataviz
 library(ggplot2)
-pns.corr <- pns %>%
-  select_if(is.numeric) #%>%
-select(-dogs)
-pns.corr$dogs_pres <- pns$dogs_pres
+n.test <- pns$dogs_pres %>%
+  createDataPartition(p = .8, list = FALSE)
+test <- pns[-n.test, ]
 
-pns.corr <- cor(pns.corr, use= 'complete.obs')
+cor_plot <- pns %>%
+  select_if(is.numeric) #%>%
+cor_plot$dogs_pres <- pns$dogs_pres
+
+cor_plot <- cor(pns.corr, use= 'complete.obs')
 corrplot::corrplot(pns.corr, type = 'lower', order = 'hclust')
 
 pns.corr <- pns %>%
@@ -13,9 +16,6 @@ pns.corr <- pns %>%
 select(-dogs)
 pns.corr$dogs_pres <- pns$dogs_pres
 
-n.test <- pns.corr$dogs_pres %>% # classification
-  createDataPartition(p = .8, list = FALSE)
-test <- pns.corr[-n.test, ]
 test1 <- pns.corr[-n.test, c(1:6, 29)]
 test2 <- pns.corr[-n.test, c(7:12, 29)]
 test3 <- pns.corr[-n.test, c(13:18, 29)]
