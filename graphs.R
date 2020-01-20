@@ -24,7 +24,8 @@ ggplot(data = corr_ass, aes(x=variable, y=value, fill=dogs_pres)) +
   theme(legend.position = "top", legend.title = element_blank()) +
   facet_wrap( ~ variable, scales="free")
 
-# test: quanti X quali ####
+# test: quali X dog ####
+set.seed(5)
 n.testR <- pns$dogs %>% # regression
   createDataPartition(p = .8, list = FALSE)
 n.testC <- pns$dogs_pres %>% # classification
@@ -33,29 +34,49 @@ n.testC <- pns$dogs_pres %>% # classification
 testR <- pns[-n.testR, ]
 testC <- pns[-n.testC, ]
 
-corrR <- testR %>% 
-  select_if(is.numeric) %>%
-  select(-dogs) %>%
-  mutate(dogs_pres = testR$dogs_pres)
+assR <- testR %>% 
+  select_if(is.character) %>%
+  select(-dogs_pres) %>%
+  mutate_all(~ as.factor(.)) %>%
+  mutate(dogs = testR$dogs)
 
-test1 <- pns.corr[-n.test, c(1:6, 29)]
-test2 <- pns.corr[-n.test, c(7:12, 29)]
-test3 <- pns.corr[-n.test, c(13:18, 29)]
-test4 <- pns.corr[-n.test, c(19:24, 29)]
-test5 <- pns.corr[-n.test, c(25:29)]
-names(test)
+library(GGally)
+a <- ggpairs(assR[,c('school', 'dogs')], ggplot2::aes(colour= school), legend = c(1, 2))
 
-m.corrR <- melt(corrR, id.vars = 'dogs_pres')
-m.test1 <- melt(test1, id.vars = 'dogs_pres')
-m.test2 <- melt(test2, id.vars = 'dogs_pres')
-m.test3 <- melt(test3, id.vars = 'dogs_pres')
-m.test4 <- melt(test4, id.vars = 'dogs_pres')
-m.test5 <- melt(test5, id.vars = 'dogs_pres')
-head(m.test)
+# multiple plots - http://bit.ly/2tzsoli ###
+# Plot separate ggplot figures in a loop.
+library(ggplot2)
 
-apply(corrR[,-18], 2, summary)
+# Make list of variable names to loop over.
+var_list = combn(names(iris)[1:3], 2, simplify=FALSE)
 
-ggplot(data = m.corrR, aes(x=variable, y=value, fill=dogs_pres)) + 
+# Make plots.
+plot_list = list()
+for (i in 1:3) {
+  p = ggplot(iris, aes_string(x=var_list[[i]][1], y=var_list[[i]][2])) +
+    geom_point(size=3, aes(colour=Species))
+  plot_list[[i]] = p
+}
+
+# Save plots to tiff. Makes a separate file for each plot.
+for (i in 1:3) {
+  file_name = paste("iris_plot_", i, ".tiff", sep="")
+  tiff(file_name)
+  print(plot_list[[i]])
+  dev.off()
+}
+
+# Another option: create pdf where each page is a separate plot.
+pdf("plots.pdf")
+for (i in 1:3) {
+  print(plot_list[[i]])
+}
+dev.off()
+
+
+a <- melt(assR, id.vars = 'raca')
+summary(assR[,-42])
+ggplot(data = assR, aes(x=microwave_pres, y=dogs, fill=microwave_pres)) + 
   geom_boxplot() +
   xlab('') +
   ylab('Number of') +
@@ -63,6 +84,6 @@ ggplot(data = m.corrR, aes(x=variable, y=value, fill=dogs_pres)) +
   theme(axis.title.x=element_blank(),
         axis.text.x=element_blank(),
         axis.ticks.x=element_blank()) +
-  theme(legend.position = "top", legend.title = element_blank()) +
+  theme(legend.position = "top", legend.title = element_blank()) #+
   facet_wrap( ~ variable, scales="free") #+
 
