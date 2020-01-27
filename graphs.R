@@ -56,8 +56,8 @@ for (i in c(1:41)) {
 names(plot_list) <- paste0('plot',1:41)
 
 require(gridExtra)
-grid.arrange(plot1, plot2, plot3,
-             plot4, plot5, plot6, ncol=3, nrow=2)
+#grid.arrange(plot1, plot2, plot3,
+#             plot4, plot5, plot6, ncol=3, nrow=2)
 
 
 # test: quali X dog_pres ####
