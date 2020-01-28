@@ -3,7 +3,7 @@ library(reshape2); library(ggplot2); require(gridExtra); library(GGally)
 # function to arrenge ~6 plots together ####
 grid.graphs <- function(n.list, i){ # 'n.list' should be a list with plots at each element 
   grid.arrange(n.list[[i]], n.list[[i+1]], n.list[[i+2]], # ''i' should be any number when added from zero until six
-               n.list[[i+3]], n.list[[i+4]], n.list[[i+5]], nrow= 2, ncol= 3) # will be the plot number of the list 
+               n.list[[i+3]], n.list[[i+4]], n.list[[i+5]], nrow= 2, ncol= 3) # will be the plot number at the list 
 }
 
 # many quantitative variables X specific quantitative variable ####
