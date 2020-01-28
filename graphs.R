@@ -102,7 +102,6 @@ for (i in 1:length(var_list)) {
     ylab('') +
     theme(legend.position = "top") +
     labs(fill = element_blank())
-    coord_flip()
   plot_listB[[i]] <- p
 }
 
